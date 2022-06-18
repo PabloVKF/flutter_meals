@@ -3,20 +3,35 @@ import 'package:meals/components/main_drawer.dart';
 import 'package:meals/screens/categories_screen.dart';
 import 'package:meals/screens/favorite_screen.dart';
 
+import '../models/meal.dart';
+
 class TabsScreen extends StatefulWidget {
-  const TabsScreen({Key? key}) : super(key: key);
+  const TabsScreen(this.favoriteMeals, {Key? key}) : super(key: key);
+
+  final List<Meal> favoriteMeals;
 
   @override
   State<TabsScreen> createState() => _TabsScreenState();
 }
 
 class _TabsScreenState extends State<TabsScreen> {
-
   int _selectedScreenIndex = 0;
-  final List<Map<String, Object>> _screens = [
-    {'title': 'Lista de categorias', 'screen': CategoriesScreens()},
-    {'title': 'Meus favoritos', 'screen': FavoriteScreen()},
-  ];
+  late List<Map<String, Object>> _screens;
+
+  @override
+  void initState() {
+    super.initState();
+    _screens = [
+      {
+        'title': 'Lista de categorias',
+        'screen': CategoriesScreens(),
+      },
+      {
+        'title': 'Meus favoritos',
+        'screen': FavoriteScreen(widget.favoriteMeals),
+      },
+    ];
+  }
 
   _selectScreen(int index) {
     setState(() {
@@ -31,7 +46,7 @@ class _TabsScreenState extends State<TabsScreen> {
       child: Scaffold(
         appBar: AppBar(
           title: Text(
-              _screens[_selectedScreenIndex]['title'] as String,
+            _screens[_selectedScreenIndex]['title'] as String,
           ),
         ),
         drawer: MainDrawer(),
